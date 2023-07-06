@@ -9,3 +9,126 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                 Int                @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  email              String
+  password           String
+  role               Role               @default(USER)
+  Session            Session[]
+  trails             TrailsOnUsers[]
+  createdAt          DateTime           @default(now())
+  videosCompleted    VideosOnUsers[]
+  questionsCompleted QuestionsOnUsers[]
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Discipline {
+  id     Int     @id @default(autoincrement())
+  title  String  @unique
+  trails Trail[]
+}
+
+model Trail {
+  id          Int             @id @default(autoincrement())
+  title       String
+  disciplines Discipline[]
+  users       TrailsOnUsers[]
+  fields      Field[]
+}
+
+model TrailsOnUsers {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  trail     Trail    @relation(fields: [trailId], references: [id])
+  trailId   Int
+  status    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@id([userId, trailId])
+}
+
+model Field {
+  id         Int        @id @default(autoincrement())
+  title      String
+  unitNumber Int
+  trailId    Int
+  trail      Trail      @relation(fields: [trailId], references: [id])
+  subfields  Subfield[]
+}
+
+model Subfield {
+  id           Int     @id @default(autoincrement())
+  title        String
+  lessonNumber Int
+  fieldId      Int
+  field        Field   @relation(fields: [fieldId], references: [id])
+  videos       Video[]
+}
+
+model Video {
+  id            Int             @id @default(autoincrement())
+  title         String
+  videoAdress   String
+  chapterNumber Int
+  subfieldId    Int
+  subfield      Subfield        @relation(fields: [subfieldId], references: [id])
+  type          MaterialType    @default(VIDEO)
+  questions     Question[]
+  users         VideosOnUsers[]
+}
+
+model Question {
+  id        Int                @id @default(autoincrement())
+  title     String
+  statement String
+  videoId   Int
+  video     Video              @relation(fields: [videoId], references: [id])
+  type      MaterialType       @default(QUESTION)
+  answers   Answer[]
+  users     QuestionsOnUsers[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  answer     String
+  isCorrect  Boolean
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+}
+
+model VideosOnUsers {
+  id      Int     @id @default(autoincrement())
+  videoId Int
+  video   Video   @relation(fields: [videoId], references: [id])
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+  isDone  Boolean @default(false)
+}
+
+model QuestionsOnUsers {
+  id         Int      @id @default(autoincrement())
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  isDone     Boolean  @default(false)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MaterialType {
+  VIDEO
+  QUESTION
+}
