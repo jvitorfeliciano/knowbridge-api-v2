@@ -1,9 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsStrongPassword,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 class CreateUserDto {
   @IsNotEmpty()
