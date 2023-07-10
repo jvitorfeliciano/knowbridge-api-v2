@@ -1,17 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  SetMetadata,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { CreateUserDto } from 'src/users/dtos/create.user.dto';
 import { SignInDto } from '../dtos/sign.in.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { Auth } from 'src/decorators/auth.decorator';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +25,7 @@ export class AuthController {
 
   @Get('teste')
   @Auth()
-  test() {
-    return 'AuthGuard working';
+  test(@User() user: any) {
+    return user;
   }
 }
