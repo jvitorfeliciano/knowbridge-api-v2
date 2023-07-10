@@ -9,7 +9,8 @@ import { SignInDto } from '../dtos/sign.in.dto';
 import { UsersRepository } from 'src/users/repository/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthRepository } from '../repository/auth.repository';
-import { SignInAnswer } from '../models/signin.answer';
+import { SignInResponse } from '../models/signin.response';
+import { TokenVerificationResponse } from '../models/token.verification.response';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,40 @@ export class AuthService {
     return token;
   }
 
+  async checkSession(id: number) {
+    const session = await this.authRepository.findById(id);
+
+    if (!session) {
+      throw new UnauthorizedException('Invalid session');
+    }
+
+    return session;
+  }
+
+  async checkUser(id: number) {
+    const user = await this.usersRepository.findById(id);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid user');
+    }
+
+    return user;
+  }
+
+  async checkToken(token: string) {
+    try {
+      const data: TokenVerificationResponse = this.jwtService.verify(token);
+
+      const session = await this.checkSession(data.sessionId);
+
+      const user = await this.checkUser(session.userId);
+
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+  }
+
   async signIn(body: SignInDto) {
     const user = await this.usersRepository.findByEmail(body.email);
 
@@ -35,12 +70,12 @@ export class AuthService {
     const session = await this.authRepository.createSession(user.id);
     const token = this.createToken(session.id);
 
-    const signInAnswer: SignInAnswer = {
+    const signInResponse: SignInResponse = {
       token,
       firstName: user.firstName,
     };
 
-    return signInAnswer;
+    return signInResponse;
   }
 
   async signUp(body: CreateUserDto) {
