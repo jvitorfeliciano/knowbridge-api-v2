@@ -8,6 +8,7 @@ import { SubfieldsModule } from './subfields/subfields.module';
 import { VideosModule } from './videos/videos.module';
 import { QuestionsModule } from './questions/questions.module';
 import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { AuthGuard } from './guards/auth.guard';
     QuestionsModule,
   ],
   controllers: [],
-  providers: [AuthGuard],
+  providers: [AuthGuard, RolesGuard],
 })
 export class AppModule {}
