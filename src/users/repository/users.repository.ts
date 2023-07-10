@@ -14,6 +14,19 @@ export class UsersRepository {
     });
   }
 
+  findById(id: number) {
+    return this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+  }
+
   create(data: CreateUserDto) {
     return this.prismaService.user.create({
       data,

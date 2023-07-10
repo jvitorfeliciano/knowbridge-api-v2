@@ -7,7 +7,9 @@ import { AuthRepository } from './repository/auth.repository';
 
 @Module({
   imports: [
-    JwtModule.register({ secret: process.env.JWT_SECRET }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+    }),
     UsersModule,
   ],
   controllers: [AuthController],

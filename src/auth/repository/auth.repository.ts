@@ -12,4 +12,12 @@ export class AuthRepository {
       },
     });
   }
+
+  findById(id: number) {
+    return this.prismaService.session.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
 }
