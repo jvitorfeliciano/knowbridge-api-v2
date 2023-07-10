@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { CreateUserDto } from 'src/users/dtos/create.user.dto';
 import { SignInDto } from '../dtos/sign.in.dto';
+import { Auth } from 'src/decorators/auth.decorator';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -21,8 +23,9 @@ export class AuthController {
     return answer;
   }
 
-  @Post('teste')
-  test(@Body() body: any) {
-    return this.authService.checkToken(body.token);
+  @Get('teste')
+  @Auth()
+  test(@User() user: any) {
+    return user;
   }
 }

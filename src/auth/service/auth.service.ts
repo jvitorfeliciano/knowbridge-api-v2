@@ -73,6 +73,7 @@ export class AuthService {
     const signInResponse: SignInResponse = {
       token,
       firstName: user.firstName,
+      role: user.role,
     };
 
     return signInResponse;
