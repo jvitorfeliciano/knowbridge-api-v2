@@ -7,6 +7,7 @@ import { FieldsModule } from './fields/fields.module';
 import { SubfieldsModule } from './subfields/subfields.module';
 import { VideosModule } from './videos/videos.module';
 import { QuestionsModule } from './questions/questions.module';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { QuestionsModule } from './questions/questions.module';
     QuestionsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AuthGuard],
 })
 export class AppModule {}

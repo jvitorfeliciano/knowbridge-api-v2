@@ -23,6 +23,7 @@ export class UsersRepository {
         id: true,
         firstName: true,
         lastName: true,
+        role: true,
       },
     });
   }
