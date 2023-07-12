@@ -16,16 +16,17 @@ export class AuthController {
     return { message: 'Ok' };
   }
 
+  @Post('sign-up/admin')
+  async signUpAdmin(@Body() body: CreateUserDto) {
+    await this.authService.signUpAdmin(body);
+
+    return { message: 'Ok' };
+  }
+
   @Post('sign-in')
   async signIn(@Body() body: SignInDto) {
     const answer = await this.authService.signIn(body);
 
     return answer;
-  }
-
-  @Get('teste')
-  @Auth()
-  test(@User() user: any) {
-    return user;
   }
 }

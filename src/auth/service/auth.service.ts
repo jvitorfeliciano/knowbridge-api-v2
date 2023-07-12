@@ -79,16 +79,38 @@ export class AuthService {
     return signInResponse;
   }
 
-  async signUp(body: CreateUserDto) {
-    const user = await this.usersRepository.findByEmail(body.email);
+  async checkEmailIsAlreadyRegistered(email: string) {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (user) {
       throw new ConflictException('Email is already registered');
     }
+  }
 
+  encryptPassword(password: string) {
     const saltRounds = 10;
-    const encryptedPassword = bcrypt.hashSync(body.password, saltRounds);
+    const encryptedPassword = bcrypt.hashSync(password, saltRounds);
+
+    return encryptedPassword;
+  }
+
+  async signUp(body: CreateUserDto) {
+    await this.checkEmailIsAlreadyRegistered(body.email);
+
+    const encryptedPassword = this.encryptPassword(body.password);
 
     await this.usersRepository.create({ ...body, password: encryptedPassword });
+  }
+
+  async signUpAdmin(body: CreateUserDto) {
+    await this.checkEmailIsAlreadyRegistered(body.email);
+
+    const encryptedPassword = this.encryptPassword(body.password);
+
+    await this.usersRepository.create({
+      ...body,
+      password: encryptedPassword,
+      role: 'ADMIN',
+    });
   }
 }
