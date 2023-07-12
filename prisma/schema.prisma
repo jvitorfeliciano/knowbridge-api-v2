@@ -11,17 +11,19 @@ datasource db {
 }
 
 model User {
-  id                 Int                @id @default(autoincrement())
-  firstName          String
-  lastName           String
-  email              String @unique
-  password           String
-  role               Role               @default(USER)
-  Session            Session[]
-  trails             TrailsOnUsers[]
-  createdAt          DateTime           @default(now())
-  videosCompleted    VideosOnUsers[]
-  questionsCompleted QuestionsOnUsers[]
+  id                   Int                     @id @default(autoincrement())
+  firstName            String
+  lastName             String
+  email                String                  @unique
+  password             String
+  role                 Role                    @default(USER)
+  Session              Session[]
+  trails               TrailsOnUsers[]
+  createdAt            DateTime                @default(now())
+  videosCompleted      VideosOnUsers[]
+  questionsCompleted   QuestionsOnUsers[]
+  userMessagingTutorIA UsersMessagingTutorIA[]
+  userReportsOnTutorIA TutorIAMistakes[]
 }
 
 model Session {
@@ -87,14 +89,16 @@ model Video {
 }
 
 model Question {
-  id        Int                @id @default(autoincrement())
-  title     String
-  statement String
-  videoId   Int
-  video     Video              @relation(fields: [videoId], references: [id])
-  type      MaterialType       @default(QUESTION)
-  answers   Answer[]
-  users     QuestionsOnUsers[]
+  id              Int                     @id @default(autoincrement())
+  title           String
+  statement       String
+  videoId         Int
+  video           Video                   @relation(fields: [videoId], references: [id])
+  type            MaterialType            @default(QUESTION)
+  answers         Answer[]
+  users           QuestionsOnUsers[]
+  questionReports UsersMessagingTutorIA[]
+  TutorIAMistakes TutorIAMistakes[]
 }
 
 model Answer {
@@ -121,6 +125,27 @@ model QuestionsOnUsers {
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
   isDone     Boolean  @default(false)
+}
+
+model UsersMessagingTutorIA {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id])
+  questionId     Int
+  question       Question @relation(fields: [questionId], references: [id])
+  userMessage    String
+  tutorIAMessage String
+  createdAt      DateTime @default(now())
+}
+
+model TutorIAMistakes {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  questionId  Int
+  question    Question @relation(fields: [questionId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
 }
 
 enum Role {
