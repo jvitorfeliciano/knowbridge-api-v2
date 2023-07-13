@@ -8,7 +8,7 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext) {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-
+    console.log(roles);
     if (roles.length === 0) {
       return true;
     }
@@ -20,15 +20,12 @@ export class RolesGuard implements CanActivate {
   }
 
   matchRoles(rolesVector: string[], user: UserPayload): boolean {
-    let hasAccess = false;
-
     for (const role of rolesVector) {
       if (role === user.role) {
-        hasAccess = true;
-        break;
+        return true;
       }
-
-      return hasAccess;
     }
+
+    return false;
   }
 }
