@@ -9,6 +9,7 @@ import { VideosModule } from './videos/videos.module';
 import { QuestionsModule } from './questions/questions.module';
 import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { TrailsModule } from './trails/trails.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RolesGuard } from './guards/roles.guard';
     SubfieldsModule,
     VideosModule,
     QuestionsModule,
+    TrailsModule,
   ],
   controllers: [],
   providers: [AuthGuard, RolesGuard],
