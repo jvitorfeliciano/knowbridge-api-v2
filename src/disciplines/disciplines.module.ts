@@ -6,6 +6,7 @@ import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [AuthModule],
+  exports:[DisciplinesService],
   controllers: [DisciplinesController],
   providers: [DisciplinesService, DisciplinesRepository],
 })

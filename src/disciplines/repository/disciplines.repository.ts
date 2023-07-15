@@ -14,6 +14,14 @@ export class DisciplinesRepository {
     });
   }
 
+  findById(id: number) {
+    return this.prismaService.discipline.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   create(data: CreateDisciplineDTO) {
     return this.prismaService.discipline.create({
       data,

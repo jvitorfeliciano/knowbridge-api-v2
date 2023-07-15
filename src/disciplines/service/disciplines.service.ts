@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DisciplinesRepository } from '../repository/disciplines.repository';
 import { CreateDisciplineDTO } from '../dtos/create.discipline.dto';
 
@@ -11,6 +15,14 @@ export class DisciplinesService {
 
     if (discipline) {
       throw new ConflictException('This discipline is already registered');
+    }
+  }
+
+  async CheckDisciplineExistsById(id: number) {
+    const discipline = await this.disciplinesRepository.findById(id);
+
+    if (!discipline) {
+      throw new NotFoundException('This discipline does not  exist');
     }
   }
 
