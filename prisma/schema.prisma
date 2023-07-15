@@ -40,11 +40,12 @@ model Discipline {
 }
 
 model Trail {
-  id          Int             @id @default(autoincrement())
-  title       String
-  disciplines Discipline[]
-  users       TrailsOnUsers[]
-  fields      Field[]
+  id           Int             @id @default(autoincrement())
+  title        String
+  disciplineId Int
+  discipline   Discipline      @relation(fields: [disciplineId], references: [id])
+  users        TrailsOnUsers[]
+  fields       Field[]
 }
 
 model TrailsOnUsers {
@@ -110,12 +111,12 @@ model Answer {
 }
 
 model VideosOnUsers {
-  id      Int     @id @default(autoincrement())
-  videoId Int
-  video   Video   @relation(fields: [videoId], references: [id])
-  userId  Int
-  user    User    @relation(fields: [userId], references: [id])
-  isDone  Boolean @default(false)
+  id        Int      @id @default(autoincrement())
+  videoId   Int
+  video     Video    @relation(fields: [videoId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model QuestionsOnUsers {
@@ -124,7 +125,7 @@ model QuestionsOnUsers {
   question   Question @relation(fields: [questionId], references: [id])
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
-  isDone     Boolean  @default(false)
+  createdAt  DateTime @default(now())
 }
 
 model UsersMessagingTutorIA {
