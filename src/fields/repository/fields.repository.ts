@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/services/prisma/prisma.service';
-import { CreateTrailDTO } from '../dtos/create.trail.dto';
 
 @Injectable()
-export class TrailsRepository {
+export class FieldsRepository {
   constructor(private prismaService: PrismaService) {}
 
-  create(data: CreateTrailDTO) {
-    return this.prismaService.trail.create({
+  create(data: any) {
+    return this.prismaService.field.create({
       data,
     });
   }
 
   findById(id: number) {
-    return this.prismaService.trail.findUnique({
+    return this.prismaService.field.findUnique({
       where: {
         id,
       },

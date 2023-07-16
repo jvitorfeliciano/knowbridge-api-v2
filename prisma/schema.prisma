@@ -111,21 +111,23 @@ model Answer {
 }
 
 model VideosOnUsers {
-  id        Int      @id @default(autoincrement())
   videoId   Int
   video     Video    @relation(fields: [videoId], references: [id])
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+
+  @@id([userId, videoId])
 }
 
 model QuestionsOnUsers {
-  id         Int      @id @default(autoincrement())
   questionId Int
   question   Question @relation(fields: [questionId], references: [id])
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
+
+  @@id([userId, questionId])
 }
 
 model UsersMessagingTutorIA {

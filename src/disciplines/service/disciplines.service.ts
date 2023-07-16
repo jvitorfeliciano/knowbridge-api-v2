@@ -18,7 +18,7 @@ export class DisciplinesService {
     }
   }
 
-  async CheckDisciplineExistsById(id: number) {
+  async findById(id: number) {
     const discipline = await this.disciplinesRepository.findById(id);
 
     if (!discipline) {

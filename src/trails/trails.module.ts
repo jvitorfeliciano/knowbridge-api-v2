@@ -7,6 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [DisciplinesModule, AuthModule],
+  exports: [TrailsService],
   controllers: [TrailsController],
   providers: [TrailsService, TrailsRepository],
 })
