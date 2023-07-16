@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/services/prisma/prisma.service';
-import { CreateTrailDTO } from '../dtos/create.trail.dto';
+import { CreateSubfieldDTO } from '../dtos/create.subfield.dto';
 
 @Injectable()
-export class TrailsRepository {
+export class SubfieldsRepository {
   constructor(private prismaService: PrismaService) {}
 
-  create(data: CreateTrailDTO) {
-    return this.prismaService.trail.create({
+  create(data: CreateSubfieldDTO) {
+    return this.prismaService.subfield.create({
       data,
     });
   }
 
   findById(id: number) {
-    return this.prismaService.trail.findUnique({
+    return this.prismaService.subfield.findUnique({
       where: {
         id,
       },

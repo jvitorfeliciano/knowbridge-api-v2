@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TrailsRepository } from '../repository/trails.repository';
 import { DisciplinesService } from 'src/disciplines/service/disciplines.service';
 import { CreateTrailDTO } from '../dtos/create.trail.dto';
@@ -11,9 +11,19 @@ export class TrailsService {
   ) {}
 
   async create(data: CreateTrailDTO) {
-    await this.disciplinesService.CheckDisciplineExistsById(data.disciplineId);
+    await this.disciplinesService.findById(data.disciplineId);
 
     const trail = await this.trailsRepository.create(data);
+
+    return trail;
+  }
+
+  async findById(id: number) {
+    const trail = await this.trailsRepository.findById(id);
+
+    if (!trail) {
+      throw new NotFoundException('Trail is not registered');
+    }
 
     return trail;
   }
