@@ -7,6 +7,7 @@ import { TrailsModule } from 'src/trails/trails.module';
 
 @Module({
   imports: [AuthModule, TrailsModule],
+  exports: [FieldsService],
   controllers: [FieldsController],
   providers: [FieldsService, FieldsRepository],
 })
