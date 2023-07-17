@@ -20,6 +20,39 @@ export class TrailsRepository {
     });
   }
 
+  findMany(userId: number) {
+    return this.prismaService.trail.findMany({
+      include: {
+        fields: {
+          include: {
+            subfields: {
+              select: {
+                videos: {
+                  select: {
+                    users: {
+                      where: {
+                        userId,
+                      },
+                    },
+                    questions: {
+                      select: {
+                        users: {
+                          where: {
+                            userId,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   createUserEnrollment(userId: number, trailId: number) {
     return this.prismaService.trailsOnUsers.create({
       data: {

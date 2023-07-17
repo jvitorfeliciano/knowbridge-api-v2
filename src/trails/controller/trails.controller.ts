@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -10,7 +11,6 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { CreateTrailDTO } from '../dtos/create.trail.dto';
 import { TrailsService } from '../service/trails.service';
 import { User } from 'src/decorators/user.decorator';
-import { userInfo } from 'os';
 import { UserPayload } from 'src/users/models/user.payload';
 
 @Controller('trails')
@@ -23,6 +23,14 @@ export class TrailsController {
     const trail = await this.trailsService.create(body);
 
     return trail;
+  }
+
+  @Get()
+  @Auth()
+  async findMany(@User() user: UserPayload) {
+    const trails = await this.trailsService.findMany(user.id);
+
+    return trails;
   }
 
   @Post('enrollment/:trailId')

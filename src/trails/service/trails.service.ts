@@ -32,6 +32,12 @@ export class TrailsService {
     return trail;
   }
 
+  async findMany(userId: number) {
+    const trails = await this.trailsRepository.findMany(userId);
+
+    return trails;
+  }
+
   async createUserEnrollment(userId: number, trailId: number) {
     const userEnrollment = await this.trailsRepository.findUserEnrollment(
       userId,
