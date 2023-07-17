@@ -33,6 +33,20 @@ export class TrailsController {
     return trails;
   }
 
+  @Get(':trailId')
+  @Auth()
+  async findById(
+    @User() user: UserPayload,
+    @Param('trailId', ParseIntPipe) trailId: number,
+  ) {
+    const trail = await this.trailsService.findByIdIncludingFieldsAndSubfields(
+      trailId,
+      user.id,
+    );
+
+    return trail;
+  }
+
   @Post('enrollment/:trailId')
   @Auth()
   async createUserEnrollment(

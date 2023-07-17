@@ -38,6 +38,20 @@ export class TrailsService {
     return trails;
   }
 
+  async findByIdIncludingFieldsAndSubfields(trailId: number, userId: number) {
+    const trail =
+      await this.trailsRepository.findByIdIncludingFieldsAndSubfields(
+        trailId,
+        userId,
+      );
+
+    if (!trail) {
+      throw new NotFoundException('Trail is not registered');
+    }
+
+    return trail;
+  }
+
   async createUserEnrollment(userId: number, trailId: number) {
     const userEnrollment = await this.trailsRepository.findUserEnrollment(
       userId,

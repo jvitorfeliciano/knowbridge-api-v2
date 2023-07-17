@@ -24,7 +24,7 @@ export class TrailsRepository {
     return this.prismaService.trail.findMany({
       include: {
         fields: {
-          include: {
+          select: {
             subfields: {
               select: {
                 videos: {
@@ -45,6 +45,45 @@ export class TrailsRepository {
                     },
                   },
                 },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  findByIdIncludingFieldsAndSubfields(trailId: number, userId: number) {
+    return this.prismaService.trail.findUnique({
+      where: {
+        id: trailId,
+      },
+      include: {
+        fields: {
+          include: {
+            subfields: {
+              include: {
+                videos: {
+                  select: {
+                    users: {
+                      where: {
+                        userId,
+                      },
+                    },
+                    questions: {
+                      select: {
+                        users: {
+                          where: {
+                            userId,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              orderBy: {
+                lessonNumber: 'asc',
               },
             },
           },
