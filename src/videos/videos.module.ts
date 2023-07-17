@@ -7,6 +7,7 @@ import { SubfieldsModule } from 'src/subfields/subfields.module';
 
 @Module({
   controllers: [VideosController],
+  exports: [VideosService],
   imports: [AuthModule, SubfieldsModule],
   providers: [VideosService, VideosRepository],
 })

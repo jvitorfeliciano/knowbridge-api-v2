@@ -22,7 +22,7 @@ export class VideosService {
     const video = await this.videosRepository.findById(id);
 
     if (!video) {
-      throw new NotFoundException('Video not found');
+      throw new NotFoundException('Video is not registered');
     }
 
     return video;
