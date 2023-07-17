@@ -23,7 +23,7 @@ model User {
   videosCompleted      VideosOnUsers[]
   questionsCompleted   QuestionsOnUsers[]
   userMessagingTutorIA UsersMessagingTutorIA[]
-  userReportsOnTutorIA TutorIAMistakes[]
+  userReportsOnTutorIA TutorIABugs[]
 }
 
 model Session {
@@ -99,7 +99,7 @@ model Question {
   answers         Answer[]
   users           QuestionsOnUsers[]
   questionReports UsersMessagingTutorIA[]
-  TutorIAMistakes TutorIAMistakes[]
+  tutorIABugs     TutorIABugs[]
 }
 
 model Answer {
@@ -141,7 +141,7 @@ model UsersMessagingTutorIA {
   createdAt      DateTime @default(now())
 }
 
-model TutorIAMistakes {
+model TutorIABugs {
   id          Int      @id @default(autoincrement())
   userId      Int
   user        User     @relation(fields: [userId], references: [id])

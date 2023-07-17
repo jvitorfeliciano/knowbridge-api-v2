@@ -19,4 +19,110 @@ export class TrailsRepository {
       },
     });
   }
+
+  findMany(userId: number) {
+    return this.prismaService.trail.findMany({
+      include: {
+        fields: {
+          select: {
+            subfields: {
+              select: {
+                videos: {
+                  select: {
+                    users: {
+                      where: {
+                        userId,
+                      },
+                    },
+                    questions: {
+                      select: {
+                        users: {
+                          where: {
+                            userId,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  findByIdIncludingFieldsAndSubfields(trailId: number, userId: number) {
+    return this.prismaService.trail.findUnique({
+      where: {
+        id: trailId,
+      },
+      include: {
+        fields: {
+          include: {
+            subfields: {
+              include: {
+                videos: {
+                  select: {
+                    users: {
+                      where: {
+                        userId,
+                      },
+                    },
+                    questions: {
+                      select: {
+                        users: {
+                          where: {
+                            userId,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              orderBy: {
+                lessonNumber: 'asc',
+              },
+            },
+          },
+          orderBy: {
+            unitNumber: 'asc',
+          },
+        },
+      },
+    });
+  }
+
+  createUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.create({
+      data: {
+        userId,
+        trailId,
+      },
+    });
+  }
+
+  findUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.findUnique({
+      where: {
+        userId_trailId: {
+          userId,
+          trailId,
+        },
+      },
+    });
+  }
+
+  deleteUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.delete({
+      where: {
+        userId_trailId: {
+          userId,
+          trailId,
+        },
+      },
+    });
+  }
 }
