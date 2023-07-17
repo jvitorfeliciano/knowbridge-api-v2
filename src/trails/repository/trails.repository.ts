@@ -48,6 +48,9 @@ export class TrailsRepository {
               },
             },
           },
+          orderBy: {
+            unitNumber: 'asc',
+          },
         },
       },
     });
