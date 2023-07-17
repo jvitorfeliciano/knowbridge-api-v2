@@ -42,9 +42,19 @@ export class TrailsService {
       throw new ConflictException('User is already enrolled on this trail');
     }
 
-    const userEnrollmentRegister =
-      await this.trailsRepository.createUserEnrollment(userId, trailId);
+    await this.trailsRepository.createUserEnrollment(userId, trailId);
+  }
 
-    return userEnrollmentRegister;
+  async deleteUserEnrollment(userId: number, trailId: number) {
+    const userEnrollment = await this.trailsRepository.findUserEnrollment(
+      userId,
+      trailId,
+    );
+
+    if (!userEnrollment) {
+      throw new NotFoundException('User is not enrolled on this trail');
+    }
+
+    await this.trailsRepository.deleteUserEnrollment(userId, trailId);
   }
 }

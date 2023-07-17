@@ -29,17 +29,17 @@ export class TrailsController {
   @Auth()
   async createUserEnrollment(
     @User() user: UserPayload,
-    @Param('trailId', ParseIntPipe) traild: number,
+    @Param('trailId', ParseIntPipe) trailId: number,
   ) {
-    const userEnrollmentRegister =
-      await this.trailsService.createUserEnrollment(user.id, traild);
-
-    return userEnrollmentRegister;
+    await this.trailsService.createUserEnrollment(user.id, trailId);
   }
 
-  @Delete('enrollment:trailId')
+  @Delete('enrollment/:trailId')
   @Auth()
-  async deleteUserEnrollment() {
-    //TODO
+  async deleteUserEnrollment(
+    @User() user: UserPayload,
+    @Param('trailId', ParseIntPipe) trailId: number,
+  ) {
+    await this.trailsService.deleteUserEnrollment(user.id, trailId);
   }
 }
