@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { TrailsRepository } from '../repository/trails.repository';
 import { DisciplinesService } from 'src/disciplines/service/disciplines.service';
 import { CreateTrailDTO } from '../dtos/create.trail.dto';
@@ -26,5 +30,21 @@ export class TrailsService {
     }
 
     return trail;
+  }
+
+  async createUserEnrollment(userId: number, trailId: number) {
+    const userEnrollment = await this.trailsRepository.findUserEnrollment(
+      userId,
+      trailId,
+    );
+
+    if (userEnrollment) {
+      throw new ConflictException('User is already enrolled on this trail');
+    }
+
+    const userEnrollmentRegister =
+      await this.trailsRepository.createUserEnrollment(userId, trailId);
+
+    return userEnrollmentRegister;
   }
 }

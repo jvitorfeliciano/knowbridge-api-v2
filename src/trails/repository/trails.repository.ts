@@ -19,4 +19,35 @@ export class TrailsRepository {
       },
     });
   }
+
+  createUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.create({
+      data: {
+        userId,
+        trailId,
+      },
+    });
+  }
+
+  findUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.findUnique({
+      where: {
+        userId_trailId: {
+          userId,
+          trailId,
+        },
+      },
+    });
+  }
+
+  deleteUserEnrollment(userId: number, trailId: number) {
+    return this.prismaService.trailsOnUsers.delete({
+      where: {
+        userId_trailId: {
+          userId,
+          trailId,
+        },
+      },
+    });
+  }
 }
