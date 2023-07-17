@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SubfieldsRepository } from '../repository/subfields.repository';
 import { FieldsService } from 'src/fields/service/fields.service';
 import { CreateSubfieldDTO } from '../dtos/create.subfield.dto';
@@ -14,6 +14,16 @@ export class SubfieldsService {
     await this.fieldsService.findById(data.fieldId);
 
     const subfield = await this.subfieldsRepository.create(data);
+
+    return subfield;
+  }
+
+  async findById(id: number) {
+    const subfield = await this.subfieldsRepository.findById(id);
+
+    if (!subfield) {
+      throw new NotFoundException('Subfield is not registered');
+    }
 
     return subfield;
   }
