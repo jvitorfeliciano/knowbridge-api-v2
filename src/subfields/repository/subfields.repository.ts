@@ -19,4 +19,39 @@ export class SubfieldsRepository {
       },
     });
   }
+
+  findByIdIncludingMaterials(userId: number, subfieldId: number) {
+    return this.prismaService.subfield.findUnique({
+      where: {
+        id: subfieldId,
+      },
+      include: {
+        videos: {
+          select: {
+            id: true,
+            title: true,
+            users: {
+              where: {
+                userId,
+              },
+            },
+            questions: {
+              select: {
+                id: true,
+                title: true,
+                users: {
+                  where: {
+                    userId,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: {
+            chapterNumber: 'asc',
+          },
+        },
+      },
+    });
+  }
 }
