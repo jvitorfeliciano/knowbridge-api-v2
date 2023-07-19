@@ -1,7 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { VideosService } from '../service/videos.service';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CreateVideoDTO } from '../dtos/create.video.dto';
+import { User } from 'src/decorators/user.decorator';
+import { UserPayload } from 'src/users/models/user.payload';
 
 @Controller('videos')
 export class VideosController {
@@ -13,5 +15,14 @@ export class VideosController {
     const video = await this.videosService.create(data);
 
     return video;
+  }
+
+  @Post('conclude/:videoId')
+  @Auth()
+  async registerConcludedVideo(
+    @User() user: UserPayload,
+    @Param('videoId', ParseIntPipe) videoId: number,
+  ) {
+    await this.videosService.registerConcludedVideo(user.id, videoId);
   }
 }

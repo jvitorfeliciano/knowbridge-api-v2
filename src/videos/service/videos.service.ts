@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { VideosRepository } from '../repository/videos.repository';
 import { SubfieldsService } from 'src/subfields/service/subfields.service';
 import { CreateVideoDTO } from '../dtos/create.video.dto';
@@ -26,5 +30,21 @@ export class VideosService {
     }
 
     return video;
+  }
+
+  async registerConcludedVideo(userId: number, videoId: number) {
+    await this.findById(videoId);
+
+    const video =
+      await this.videosRepository.findVideoConcludedByItsIdAndUserId(
+        userId,
+        videoId,
+      );
+
+    if (video) {
+      throw new ConflictException('Video is already concluded');
+    }
+
+    await this.videosRepository.registerConcludedVideo(userId, videoId);
   }
 }

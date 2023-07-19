@@ -19,4 +19,24 @@ export class VideosRepository {
       },
     });
   }
+
+  findVideoConcludedByItsIdAndUserId(userId: number, videoId: number) {
+    return this.prismaService.videosOnUsers.findUnique({
+      where: {
+        userId_videoId: {
+          userId,
+          videoId,
+        },
+      },
+    });
+  }
+
+  registerConcludedVideo(userId: number, videoId: number) {
+    return this.prismaService.videosOnUsers.create({
+      data: {
+        userId,
+        videoId,
+      },
+    });
+  }
 }
