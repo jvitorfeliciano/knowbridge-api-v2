@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { QuestionsRepository } from '../repository/questions.repository';
 import { VideosService } from 'src/videos/service/videos.service';
 import { CreateQuestionDTO } from '../dtos/create.question.dto';
@@ -16,5 +21,47 @@ export class QuestionsService {
     const question = await this.questionsRepository.create(data);
 
     return question;
+  }
+
+  async checkIfUserCompletedTheQuestion(userId: number, questionId: number) {
+    const question =
+      await this.questionsRepository.findQuestionConcludedByItsIdAndUserId(
+        userId,
+        questionId,
+      );
+
+    if (question) {
+      throw new ConflictException('Question already completed');
+    }
+  }
+
+  async validateProvidedAnswer(
+    userId: number,
+    questionId: number,
+    answerId: number,
+  ) {
+    await this.checkIfUserCompletedTheQuestion(userId, questionId);
+
+    const question =
+      await this.questionsRepository.findByIdIncludingProvidedAnswer(
+        questionId,
+        answerId,
+      );
+
+    if (!question) {
+      throw new NotFoundException('Question is not registered');
+    }
+
+    if (question.answers.length === 0) {
+      throw new NotFoundException('Answer is not registered');
+    }
+
+    if (!question.answers[0].isCorrect) {
+      //since the answerId is unique it's guaranteed there will be only one position;
+
+      throw new BadRequestException('Incorrect answer');
+    }
+
+    await this.questionsRepository.registerCorrectAnswer(userId, questionId);
   }
 }

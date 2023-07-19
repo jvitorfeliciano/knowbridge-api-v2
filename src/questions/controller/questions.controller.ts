@@ -1,7 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CreateQuestionDTO } from '../dtos/create.question.dto';
 import { QuestionsService } from '../service/questions.service';
+import { User } from 'src/decorators/user.decorator';
+import { UserPayload } from 'src/users/models/user.payload';
+import { ConcludeQuestionDTO } from '../dtos/conclude.question.dto';
 
 @Controller('questions')
 export class QuestionsController {
@@ -13,5 +16,19 @@ export class QuestionsController {
     const question = await this.questionsService.create(data);
 
     return question;
+  }
+
+  @Post('conclude/:questionId')
+  @Auth()
+  async validateProvidedAnswer(
+    @User() user: UserPayload,
+    @Param('questionId', ParseIntPipe) questionId: number,
+    @Body() body: ConcludeQuestionDTO,
+  ) {
+    await this.questionsService.validateProvidedAnswer(
+      user.id,
+      questionId,
+      body.answerId,
+    );
   }
 }

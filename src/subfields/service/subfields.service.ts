@@ -27,4 +27,17 @@ export class SubfieldsService {
 
     return subfield;
   }
+
+  async findByIdIncludingMaterial(userId: number, subfieldId: number) {
+    const subfield = await this.subfieldsRepository.findByIdIncludingMaterials(
+      userId,
+      subfieldId,
+    );
+
+    if (!subfield) {
+      throw new NotFoundException('Subfield is not registered');
+    }
+
+    return subfield;
+  }
 }

@@ -21,4 +21,39 @@ export class QuestionsRepository {
       },
     });
   }
+
+  findByIdIncludingProvidedAnswer(questionId: number, answerId: number) {
+    return this.prismaService.question.findUnique({
+      where: {
+        id: questionId,
+      },
+      include: {
+        answers: {
+          where: {
+            id: answerId,
+          },
+        },
+      },
+    });
+  }
+
+  registerCorrectAnswer(userId: number, questionId: number) {
+    return this.prismaService.questionsOnUsers.create({
+      data: {
+        userId,
+        questionId,
+      },
+    });
+  }
+
+  findQuestionConcludedByItsIdAndUserId(userId: number, questionId: number) {
+    return this.prismaService.questionsOnUsers.findUnique({
+      where: {
+        userId_questionId: {
+          userId,
+          questionId,
+        },
+      },
+    });
+  }
 }
