@@ -12,15 +12,11 @@ export class AuthController {
   @Post('sign-up')
   async signUp(@Body() body: CreateUserDto) {
     await this.authService.signUp(body);
-
-    return { message: 'Ok' };
   }
 
   @Post('sign-up/admin')
   async signUpAdmin(@Body() body: CreateUserDto) {
     await this.authService.signUpAdmin(body);
-
-    return { message: 'Ok' };
   }
 
   @Post('sign-in')
