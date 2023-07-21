@@ -1,4 +1,11 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CreateQuestionDTO } from '../dtos/create.question.dto';
 import { QuestionsService } from '../service/questions.service';
@@ -30,5 +37,20 @@ export class QuestionsController {
       questionId,
       body.answerId,
     );
+  }
+
+  @Get(':questionId')
+  @Auth()
+  async findById(
+    @User() user: UserPayload,
+    @Param('questionId', ParseIntPipe) questionId: number,
+  ) {
+    const question =
+      await this.questionsService.findByIdIncludingItsAnswersAndConclusionStatus(
+        user.id,
+        questionId,
+      );
+
+    return question;
   }
 }

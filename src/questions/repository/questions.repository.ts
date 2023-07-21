@@ -37,6 +37,28 @@ export class QuestionsRepository {
     });
   }
 
+  findByIdIncludingItsAnswersAndConclusionStatus(
+    userId: number,
+    questionId: number,
+  ) {
+    return this.prismaService.question.findUnique({
+      where: {
+        id: questionId,
+      },
+      include: {
+        answers: true,
+        users: {
+          where: {
+            userId,
+          },
+          select: {
+            createdAt: true,
+          },
+        },
+      },
+    });
+  }
+
   registerCorrectAnswer(userId: number, questionId: number) {
     return this.prismaService.questionsOnUsers.create({
       data: {
