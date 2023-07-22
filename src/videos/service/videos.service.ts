@@ -47,4 +47,18 @@ export class VideosService {
 
     await this.videosRepository.registerConcludedVideo(userId, videoId);
   }
+
+  async findByIdIncludingItsConclusionStatus(userId: number, videoId: number) {
+    const video =
+      await this.videosRepository.findByIdIncludingItsConclusionStatus(
+        userId,
+        videoId,
+      );
+
+    if (!video) {
+      throw new NotFoundException('Video is not registered');
+    }
+
+    return video;
+  }
 }

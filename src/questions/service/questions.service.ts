@@ -64,4 +64,39 @@ export class QuestionsService {
 
     await this.questionsRepository.registerCorrectAnswer(userId, questionId);
   }
+
+  async findByIdIncludingItsAnswersAndConclusionStatus(
+    userId: number,
+    questionId: number,
+  ) {
+    const question =
+      await this.questionsRepository.findByIdIncludingItsAnswersAndConclusionStatus(
+        userId,
+        questionId,
+      );
+
+    if (!question) {
+      throw new NotFoundException('Question is not registered');
+    }
+
+    return question;
+  }
+
+  async createUserReportOnIABuggyInstruction(
+    userId: number,
+    questionId: number,
+    description: string,
+  ) {
+    const question = await this.questionsRepository.findById(questionId);
+
+    if (!question) {
+      throw new NotFoundException('Question is not registered');
+    }
+
+    await this.questionsRepository.createUserReportOnIABuggyInstruction(
+      userId,
+      questionId,
+      description,
+    );
+  }
 }

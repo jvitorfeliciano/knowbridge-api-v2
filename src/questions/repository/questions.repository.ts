@@ -22,6 +22,14 @@ export class QuestionsRepository {
     });
   }
 
+  findById(id: number) {
+    return this.prismaService.question.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   findByIdIncludingProvidedAnswer(questionId: number, answerId: number) {
     return this.prismaService.question.findUnique({
       where: {
@@ -31,6 +39,28 @@ export class QuestionsRepository {
         answers: {
           where: {
             id: answerId,
+          },
+        },
+      },
+    });
+  }
+
+  findByIdIncludingItsAnswersAndConclusionStatus(
+    userId: number,
+    questionId: number,
+  ) {
+    return this.prismaService.question.findUnique({
+      where: {
+        id: questionId,
+      },
+      include: {
+        answers: true,
+        users: {
+          where: {
+            userId,
+          },
+          select: {
+            createdAt: true,
           },
         },
       },
@@ -53,6 +83,20 @@ export class QuestionsRepository {
           userId,
           questionId,
         },
+      },
+    });
+  }
+
+  createUserReportOnIABuggyInstruction(
+    userId: number,
+    questionId: number,
+    description: string,
+  ) {
+    return this.prismaService.tutorIABugs.create({
+      data: {
+        userId,
+        questionId,
+        description,
       },
     });
   }

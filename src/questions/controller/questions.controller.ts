@@ -1,10 +1,18 @@
-import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { Auth } from 'src/decorators/auth.decorator';
 import { CreateQuestionDTO } from '../dtos/create.question.dto';
 import { QuestionsService } from '../service/questions.service';
 import { User } from 'src/decorators/user.decorator';
 import { UserPayload } from 'src/users/models/user.payload';
 import { ConcludeQuestionDTO } from '../dtos/conclude.question.dto';
+import { CreateUserReportOnIABuggyInstruction } from '../dtos/create.user.report.ia.buggy.instruction.dto';
 
 @Controller('questions')
 export class QuestionsController {
@@ -30,5 +38,34 @@ export class QuestionsController {
       questionId,
       body.answerId,
     );
+  }
+
+  @Post('bugs/:questionId')
+  @Auth()
+  async createUserReportOnIABuggyInstruction(
+    @User() user: UserPayload,
+    @Param('questionId', ParseIntPipe) questionId: number,
+    @Body() body: CreateUserReportOnIABuggyInstruction,
+  ) {
+    await this.questionsService.createUserReportOnIABuggyInstruction(
+      user.id,
+      questionId,
+      body.description,
+    );
+  }
+
+  @Get(':questionId')
+  @Auth()
+  async findById(
+    @User() user: UserPayload,
+    @Param('questionId', ParseIntPipe) questionId: number,
+  ) {
+    const question =
+      await this.questionsService.findByIdIncludingItsAnswersAndConclusionStatus(
+        user.id,
+        questionId,
+      );
+
+    return question;
   }
 }
