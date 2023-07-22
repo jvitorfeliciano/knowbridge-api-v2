@@ -81,4 +81,22 @@ export class QuestionsService {
 
     return question;
   }
+
+  async createUserReportOnIABuggyInstruction(
+    userId: number,
+    questionId: number,
+    description: string,
+  ) {
+    const question = await this.questionsRepository.findById(questionId);
+
+    if (!question) {
+      throw new NotFoundException('Question is not registered');
+    }
+
+    await this.questionsRepository.createUserReportOnIABuggyInstruction(
+      userId,
+      questionId,
+      description,
+    );
+  }
 }

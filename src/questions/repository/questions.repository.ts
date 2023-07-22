@@ -22,6 +22,14 @@ export class QuestionsRepository {
     });
   }
 
+  findById(id: number) {
+    return this.prismaService.question.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   findByIdIncludingProvidedAnswer(questionId: number, answerId: number) {
     return this.prismaService.question.findUnique({
       where: {
@@ -75,6 +83,20 @@ export class QuestionsRepository {
           userId,
           questionId,
         },
+      },
+    });
+  }
+
+  createUserReportOnIABuggyInstruction(
+    userId: number,
+    questionId: number,
+    description: string,
+  ) {
+    return this.prismaService.tutorIABugs.create({
+      data: {
+        userId,
+        questionId,
+        description,
       },
     });
   }

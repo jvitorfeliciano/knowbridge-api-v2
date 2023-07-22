@@ -12,6 +12,7 @@ import { QuestionsService } from '../service/questions.service';
 import { User } from 'src/decorators/user.decorator';
 import { UserPayload } from 'src/users/models/user.payload';
 import { ConcludeQuestionDTO } from '../dtos/conclude.question.dto';
+import { CreateUserReportOnIABuggyInstruction } from '../dtos/create.user.report.ia.buggy.instruction.dto';
 
 @Controller('questions')
 export class QuestionsController {
@@ -36,6 +37,20 @@ export class QuestionsController {
       user.id,
       questionId,
       body.answerId,
+    );
+  }
+
+  @Post('bugs/:questionId')
+  @Auth()
+  async createUserReportOnIABuggyInstruction(
+    @User() user: UserPayload,
+    @Param('questionId', ParseIntPipe) questionId: number,
+    @Body() body: CreateUserReportOnIABuggyInstruction,
+  ) {
+    await this.questionsService.createUserReportOnIABuggyInstruction(
+      user.id,
+      questionId,
+      body.description,
     );
   }
 
