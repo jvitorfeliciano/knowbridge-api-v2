@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) This repository contains the API for a basic EdTech platform designed to manage and store educational content trails. The API provides endpoints to organize and retrieve a variety of learning materials, including video lessons, quizzes, and interactive questions.
+This repository contains the API for a basic EdTech platform designed to manage and store educational content trails. The API provides endpoints to organize and retrieve a variety of learning materials, including video lessons, quizzes, and interactive questions.
 ## Installation
 
 ```bash
